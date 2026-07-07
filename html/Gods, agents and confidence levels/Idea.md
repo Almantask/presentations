@@ -118,10 +118,30 @@ Then I created **symlinks** to every folder in it:
 .ai/agents -> .github/agents
 .ai/skills -> .github/skills
 
-## Edge cases
+It works even if your skills/agents have extra frontmatter fields - so just have it all the frontmatter fields mixed - what is not used will be ignored.
 
-### Gemini couldn't load more complicated agents/skills
+### Edge cases
+
+#### Gemini couldn't load more complicated agents/skills
 
 Gemini didn't like extra frontmatter fields - refused to load the agents/skills with those. So I made them lean because I am good with the defaults. However if you want to make full use of Claude - there are more than 20 frontmatter fields.
 
-###
+## Reusing skills across projects
+
+I have the following skills that I like using no matter what project I am at:
+
+- markdown to slides - for visualizing some concept, understanding or presenting something (like this presentation)
+- agent-designer - for designing agents and workflows with them
+- skill-writer - for writing new skills
+- cd-cd-pipeline-builder - all projects need local-> production + quality gate
+- commit-writer - writing semantic commits (bug/feat !- breaking change..)
+- improving-agent - for editing agents and skills after they made a mistake
+
+## Conclusion
+
+Use AI to automate boring stuff.
+Never trust AI blindly.
+Automate fact-check through real digital resources.
+Then fact check those.
+
+Switching AI tools and skills is easy - use symlinks.
