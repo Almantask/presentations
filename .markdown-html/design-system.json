@@ -1,0 +1,39 @@
+{
+  "brand": {
+    "accent": "#00D4AA",
+    "bg": null,
+    "primary": "#0A1628",
+    "text": null
+  },
+  "code_theme": "auto",
+  "company_name": "",
+  "default_output_dir": "./markdown-html-out/",
+  "derived_palette": {
+    "--md-accent": "#00D4AA",
+    "--md-accent-soft": "rgba(0, 212, 170, 0.14)",
+    "--md-bg": "#0A1628",
+    "--md-border": "#163058",
+    "--md-code-bg": "#0E1E38",
+    "--md-link": "#00D4AA",
+    "--md-link-hover": "#00FCCA",
+    "--md-success": "#10A85C",
+    "--md-surface": "#102340",
+    "--md-text": "#F7F7F2",
+    "--md-text-muted": "rgba(247, 247, 242, 0.68)",
+    "--md-warn": "#C87C10"
+  },
+  "design_style": "technical",
+  "logo_url": "",
+  "setup_completed_at": "2026-07-07T21:31:43.894866+00:00",
+  "skill": "design-system",
+  "toc": {
+    "behavior": "sticky-sidebar",
+    "max_depth": 3
+  },
+  "typography": {
+    "body_font": "Inter",
+    "heading_font": "Inter",
+    "scale_ratio": 1.25
+  },
+  "version": 1
+}

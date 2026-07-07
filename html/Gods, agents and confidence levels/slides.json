@@ -1,0 +1,124 @@
+{
+  "slides": [
+    {
+      "slide_number": 1,
+      "title": "Gods, agents and confidence levels",
+      "body_markdown": "\nReusing orchestrated agent workflows across AI tools",
+      "raw_body_markdown": "# Gods, agents and confidence levels\n\nReusing orchestrated agent workflows across AI tools",
+      "source_line": 0,
+      "line_count": 3
+    },
+    {
+      "slide_number": 2,
+      "title": "My AI Journey",
+      "body_markdown": "\nEngineering Manager & AI experimenter\n\n- **10+ years in IT** as an Engineering Manager.\n- **3 years of AI prototyping**: built over a hundred agents.\n- **Author**: wrote an early book on applying AI without sacrificing software quality.\n- **Prototypes**: built a baltic mythology research site and a D&D soundboard/ambience mixer.\n\n<!-- notes:\n- Welcome everyone to the presentation.\n- Introduce myself: engineering manager for 10+ years.\n- Highlight my passion projects (baltic mythology, D&D soundboard).\n- Explain that these projects became the testing ground for advanced AI agent orchestration.\n-->",
+      "raw_body_markdown": "# My AI Journey\n\nEngineering Manager & AI experimenter\n\n- **10+ years in IT** as an Engineering Manager.\n- **3 years of AI prototyping**: built over a hundred agents.\n- **Author**: wrote an early book on applying AI without sacrificing software quality.\n- **Prototypes**: built a baltic mythology research site and a D&D soundboard/ambience mixer.\n\n<!-- notes:\n- Welcome everyone to the presentation.\n- Introduce myself: engineering manager for 10+ years.\n- Highlight my passion projects (baltic mythology, D&D soundboard).\n- Explain that these projects became the testing ground for advanced AI agent orchestration.\n-->",
+      "source_line": 5,
+      "line_count": 15
+    },
+    {
+      "slide_number": 3,
+      "title": "Perk\u016bnas: AI vs. Mythology",
+      "body_markdown": "\nLooking good is not the same as being correct\n\n- **Perk\u016bnas**: Baltic god of thunder, sky, storms, rain, and war.\n- **AI-Generated Image**: Shows him riding a carriage pulled by three goats, holding an axe.\n- **The Historical Reality**:\n  - Goats were *sacrificed* to Perk\u016bnas; he doesn't ride them.\n  - He traditionally wields a *sword*, not an axe.\n- **Key Lesson**: Visually appealing outputs from AI can be factually wrong.\n\n<!-- notes:\n- Show the audience this example of Perk\u016bnas.\n- Point out how easy it is for image generators and LLMs to hallucinate details that sound or look plausible.\n- Explain the frustration of trying to get correct facts on obscure topics like baltic mythology.\n-->",
+      "raw_body_markdown": "# Perk\u016bnas: AI vs. Mythology\n\nLooking good is not the same as being correct\n\n- **Perk\u016bnas**: Baltic god of thunder, sky, storms, rain, and war.\n- **AI-Generated Image**: Shows him riding a carriage pulled by three goats, holding an axe.\n- **The Historical Reality**:\n  - Goats were *sacrificed* to Perk\u016bnas; he doesn't ride them.\n  - He traditionally wields a *sword*, not an axe.\n- **Key Lesson**: Visually appealing outputs from AI can be factually wrong.\n\n<!-- notes:\n- Show the audience this example of Perk\u016bnas.\n- Point out how easy it is for image generators and LLMs to hallucinate details that sound or look plausible.\n- Explain the frustration of trying to get correct facts on obscure topics like baltic mythology.\n-->",
+      "source_line": 23,
+      "line_count": 16
+    },
+    {
+      "slide_number": 4,
+      "title": "The Historian's Dilemma",
+      "body_markdown": "\nManual research is tedious and boring\n\n- Baltic mythology records are stored in **primitive, scattered sites**.\n- Details are often **inconsistent** between Latvian and Lithuanian sources.\n- **Manual verification** is boring, repetitive, and time-consuming.\n- **Question**: Can we automate this research and fact-checking flow?\n\n<!-- notes:\n- Explain that doing this research manually was very slow.\n- The websites look like they are from the 90s, search functions are broken.\n- Contrast between Lithuanian and Latvian spellings and stories.\n- Ask the question: How do we automate this?\n-->",
+      "raw_body_markdown": "# The Historian's Dilemma\n\nManual research is tedious and boring\n\n- Baltic mythology records are stored in **primitive, scattered sites**.\n- Details are often **inconsistent** between Latvian and Lithuanian sources.\n- **Manual verification** is boring, repetitive, and time-consuming.\n- **Question**: Can we automate this research and fact-checking flow?\n\n<!-- notes:\n- Explain that doing this research manually was very slow.\n- The websites look like they are from the 90s, search functions are broken.\n- Contrast between Lithuanian and Latvian spellings and stories.\n- Ask the question: How do we automate this?\n-->",
+      "source_line": 42,
+      "line_count": 15
+    },
+    {
+      "slide_number": 5,
+      "title": "Initial Phase: Heavy Agents",
+      "body_markdown": "\nMonolithic configurations with duplicate logic\n\n- **The Multi-Agent Team**:\n  - **Browser Researcher**: Google search and data gathering.\n  - **Editor**: Compares findings with repository and flags issues.\n  - **FE Developer**: Implements UI display.\n- **The Problem**:\n  - Flow instructions duplicated across all 4 agents.\n  - Inconsistent orchestration (sometimes subagents spawn, sometimes not).\n\n<!-- notes:\n- Describe my initial approach: giving agents massive, monolithic instructions.\n- Because the agents needed to know the whole flow, I had to duplicate instructions across all of them.\n- If one instruction changed, I had to update 4 different files.\n-->",
+      "raw_body_markdown": "# Initial Phase: Heavy Agents\n\nMonolithic configurations with duplicate logic\n\n- **The Multi-Agent Team**:\n  - **Browser Researcher**: Google search and data gathering.\n  - **Editor**: Compares findings with repository and flags issues.\n  - **FE Developer**: Implements UI display.\n- **The Problem**:\n  - Flow instructions duplicated across all 4 agents.\n  - Inconsistent orchestration (sometimes subagents spawn, sometimes not).\n\n<!-- notes:\n- Describe my initial approach: giving agents massive, monolithic instructions.\n- Because the agents needed to know the whole flow, I had to duplicate instructions across all of them.\n- If one instruction changed, I had to update 4 different files.\n-->",
+      "source_line": 60,
+      "line_count": 17
+    },
+    {
+      "slide_number": 6,
+      "title": "Shifting from Agents to Skills",
+      "body_markdown": "\nDecoupling identity from action sequences\n\n- **Agents**: Define *who* they are, their persona, and what tools they can access.\n- **Skills**: Define *how* a specific task is orchestrated.\n- Split the monolithic logic into two reusable **Skills**:\n  1. **Fact Check Skill** \u2014 verifying existing content.\n  2. **Research Skill** \u2014 discovering and verifying new concepts.\n\n<!-- notes:\n- Explain the architectural shift: moving from heavy agents to modular skills.\n- Like a person who has skills (cooking, typing) that are separate from their personality.\n- This lets us reuse skills across different agents or even different projects.\n-->",
+      "raw_body_markdown": "# Shifting from Agents to Skills\n\nDecoupling identity from action sequences\n\n- **Agents**: Define *who* they are, their persona, and what tools they can access.\n- **Skills**: Define *how* a specific task is orchestrated.\n- Split the monolithic logic into two reusable **Skills**:\n  1. **Fact Check Skill** \u2014 verifying existing content.\n  2. **Research Skill** \u2014 discovering and verifying new concepts.\n\n<!-- notes:\n- Explain the architectural shift: moving from heavy agents to modular skills.\n- Like a person who has skills (cooking, typing) that are separate from their personality.\n- This lets us reuse skills across different agents or even different projects.\n-->",
+      "source_line": 80,
+      "line_count": 15
+    },
+    {
+      "slide_number": 7,
+      "title": "The Fact Check Skill",
+      "body_markdown": "\nParallel search and automated PDF analysis\n\n- Spawns two parallel **Browser Researchers**:\n  - **Researcher 1**: Searches Lithuanian (LT) resources.\n  - **Researcher 2**: Searches Latvian (LV) resources.\n- Reads and parses **public PDF files** for deep historical context.\n- Generates a structured comparison and confidence table.\n\n<!-- notes:\n- Detail how the Fact Check skill works under the hood.\n- By running searches in parallel (LT and LV), we get both sides of the baltic myths.\n- We also expanded it to read PDFs since academic papers are often stored as PDFs.\n-->",
+      "raw_body_markdown": "# The Fact Check Skill\n\nParallel search and automated PDF analysis\n\n- Spawns two parallel **Browser Researchers**:\n  - **Researcher 1**: Searches Lithuanian (LT) resources.\n  - **Researcher 2**: Searches Latvian (LV) resources.\n- Reads and parses **public PDF files** for deep historical context.\n- Generates a structured comparison and confidence table.\n\n<!-- notes:\n- Detail how the Fact Check skill works under the hood.\n- By running searches in parallel (LT and LV), we get both sides of the baltic myths.\n- We also expanded it to read PDFs since academic papers are often stored as PDFs.\n-->",
+      "source_line": 98,
+      "line_count": 15
+    },
+    {
+      "slide_number": 8,
+      "title": "Fact Check Results",
+      "body_markdown": "\nReal verification table generated by the skill\n\n![Fact Check Results](image.png)\n\n<!-- notes:\n- Show the visual evidence of the Fact Check skill in action.\n- Walk through the columns: Deity, Claim, LT Source, LV Source, Status, and Confidence.\n- Note how the tool handles conflicting data or low confidence.\n-->",
+      "raw_body_markdown": "# Fact Check Results\n\nReal verification table generated by the skill\n\n![Fact Check Results](image.png)\n\n<!-- notes:\n- Show the visual evidence of the Fact Check skill in action.\n- Walk through the columns: Deity, Claim, LT Source, LV Source, Status, and Confidence.\n- Note how the tool handles conflicting data or low confidence.\n-->",
+      "source_line": 116,
+      "line_count": 11
+    },
+    {
+      "slide_number": 9,
+      "title": "The Research Skill",
+      "body_markdown": "\nSynthesizing and building new interfaces\n\n- **Parallel Discovery Phase**:\n  - **LLM Researcher**: Synthesizes creative ideas and outlines.\n  - **Browser Researchers**: Cross-reference and verify.\n- **Build Phase**:\n  - **Editor Agent**: Flags structural conflicts.\n  - **FE Dev Agent**: Implements the user interface automatically.\n\n<!-- notes:\n- Explain the Research skill which is focused on creating new pages/content.\n- This shows a pipeline of LLM Research -> Browser Verification -> Editorial Review -> Code Generation.\n-->",
+      "raw_body_markdown": "# The Research Skill\n\nSynthesizing and building new interfaces\n\n- **Parallel Discovery Phase**:\n  - **LLM Researcher**: Synthesizes creative ideas and outlines.\n  - **Browser Researchers**: Cross-reference and verify.\n- **Build Phase**:\n  - **Editor Agent**: Flags structural conflicts.\n  - **FE Dev Agent**: Implements the user interface automatically.\n\n<!-- notes:\n- Explain the Research skill which is focused on creating new pages/content.\n- This shows a pipeline of LLM Research -> Browser Verification -> Editorial Review -> Code Generation.\n-->",
+      "source_line": 130,
+      "line_count": 15
+    },
+    {
+      "slide_number": 10,
+      "title": "The Multitool Headache",
+      "body_markdown": "\nThe pain of configuration divergence\n\n- Using multiple AI tools for different purposes:\n  - **GitHub Copilot** (cheap prototyping and completions).\n  - **Gemini & Antigravity** (quick fixes and research).\n- **Divergence Nightmare**:\n  - 5 agents + 2 skills = 7 configs.\n  - Duplicated across `.github`, `.gemini`, and `.antigravity` folders.\n  - **15 files to maintain manually**! Updates became inconsistent.\n\n<!-- notes:\n- Discuss the developer experience problem.\n- Every tool wants its own configuration folder.\n- Copilot uses one folder, Gemini another, Antigravity another.\n- Keeping these in sync was incredibly frustrating and error-prone.\n-->",
+      "raw_body_markdown": "# The Multitool Headache\n\nThe pain of configuration divergence\n\n- Using multiple AI tools for different purposes:\n  - **GitHub Copilot** (cheap prototyping and completions).\n  - **Gemini & Antigravity** (quick fixes and research).\n- **Divergence Nightmare**:\n  - 5 agents + 2 skills = 7 configs.\n  - Duplicated across `.github`, `.gemini`, and `.antigravity` folders.\n  - **15 files to maintain manually**! Updates became inconsistent.\n\n<!-- notes:\n- Discuss the developer experience problem.\n- Every tool wants its own configuration folder.\n- Copilot uses one folder, Gemini another, Antigravity another.\n- Keeping these in sync was incredibly frustrating and error-prone.\n-->",
+      "source_line": 148,
+      "line_count": 18
+    },
+    {
+      "slide_number": 11,
+      "title": "The Solution: Symlinks",
+      "body_markdown": "\nSingle source of truth across all tools\n\n- Move all agent and skill definitions to a central `.ai/` folder.\n- Create **symbolic links** in each tool's configuration directory:\n  ```bash\n  .ai/agents -> .gemini/agents\n  .ai/skills -> .gemini/skills\n  # Same symlinks for .antigravity and .github\n  ```\n- **Unified Frontmatter**: Mixed frontmatter fields are gracefully parsed; tools ignore keys they don't recognize.\n\n<!-- notes:\n- Walk through the symlink setup.\n- This simple trick of directory symlinking solved the duplication.\n- Any change made in `.ai/` is instantly visible to all AI tools.\n- Frontmatter differences are ignored by tools that don't support them.\n-->",
+      "raw_body_markdown": "# The Solution: Symlinks\n\nSingle source of truth across all tools\n\n- Move all agent and skill definitions to a central `.ai/` folder.\n- Create **symbolic links** in each tool's configuration directory:\n  ```bash\n  .ai/agents -> .gemini/agents\n  .ai/skills -> .gemini/skills\n  # Same symlinks for .antigravity and .github\n  ```\n- **Unified Frontmatter**: Mixed frontmatter fields are gracefully parsed; tools ignore keys they don't recognize.\n\n<!-- notes:\n- Walk through the symlink setup.\n- This simple trick of directory symlinking solved the duplication.\n- Any change made in `.ai/` is instantly visible to all AI tools.\n- Frontmatter differences are ignored by tools that don't support them.\n-->",
+      "source_line": 169,
+      "line_count": 19
+    },
+    {
+      "slide_number": 12,
+      "title": "Tool Quirks & Frontmatter",
+      "body_markdown": "\nHandling differences between LLM clients\n\n- **Gemini**:\n  - Strict validator; crashes on unknown frontmatter fields.\n  - *Fix*: Keep configs lean and rely on sensible defaults.\n- **Claude**:\n  - Powerhouse; supports 20+ frontmatter fields for advanced steering.\n- **Strategy**: Design for the lowest common denominator, or use a pre-process script if needed.\n\n<!-- notes:\n- Be honest about the limitations.\n- Gemini is more sensitive to non-standard headers.\n- Keeping them lean is usually the best approach unless you specifically need Claude-only steering fields.\n-->",
+      "raw_body_markdown": "# Tool Quirks & Frontmatter\n\nHandling differences between LLM clients\n\n- **Gemini**:\n  - Strict validator; crashes on unknown frontmatter fields.\n  - *Fix*: Keep configs lean and rely on sensible defaults.\n- **Claude**:\n  - Powerhouse; supports 20+ frontmatter fields for advanced steering.\n- **Strategy**: Design for the lowest common denominator, or use a pre-process script if needed.\n\n<!-- notes:\n- Be honest about the limitations.\n- Gemini is more sensitive to non-standard headers.\n- Keeping them lean is usually the best approach unless you specifically need Claude-only steering fields.\n-->",
+      "source_line": 191,
+      "line_count": 16
+    },
+    {
+      "slide_number": 13,
+      "title": "My Reusable Skill Library",
+      "body_markdown": "\nMy personal toolbox carried across projects\n\n- **markdown-to-slides**: Compiles outlines into interactive decks (like this one!).\n- **agent-designer**: Structures multi-agent architectures.\n- **skill-writer**: Auto-generates schemas and guides for new skills.\n- **ci-cd-pipeline-builder**: Fast quality gate setup.\n- **commit-writer**: Enforces semantic commit messages.\n- **improving-agent**: Refines skills when errors are found.\n\n<!-- notes:\n- Share the skills I reuse in almost every repository.\n- These are the foundational tools that speed up my engineering workflows.\n-->",
+      "raw_body_markdown": "# My Reusable Skill Library\n\nMy personal toolbox carried across projects\n\n- **markdown-to-slides**: Compiles outlines into interactive decks (like this one!).\n- **agent-designer**: Structures multi-agent architectures.\n- **skill-writer**: Auto-generates schemas and guides for new skills.\n- **ci-cd-pipeline-builder**: Fast quality gate setup.\n- **commit-writer**: Enforces semantic commit messages.\n- **improving-agent**: Refines skills when errors are found.\n\n<!-- notes:\n- Share the skills I reuse in almost every repository.\n- These are the foundational tools that speed up my engineering workflows.\n-->",
+      "source_line": 210,
+      "line_count": 15
+    },
+    {
+      "slide_number": 14,
+      "title": "Key Takeaways",
+      "body_markdown": "\nHow to build trust and efficiency with AI\n\n- > **Automate the boring stuff**, but never trust AI blindly.\n- Use multi-lingual browser searches and PDF scraping to fact-check.\n- Centralize your agent/skill logic in `.ai/` and use **symlinks** to sync across Copilot, Gemini, and Claude.\n\n<!-- notes:\n- Summarize the main points: fact-checking, automation, and symlinking.\n- Thank the audience for their time.\n- Open the floor for any questions.\n-->",
+      "raw_body_markdown": "# Key Takeaways\n\nHow to build trust and efficiency with AI\n\n- > **Automate the boring stuff**, but never trust AI blindly.\n- Use multi-lingual browser searches and PDF scraping to fact-check.\n- Centralize your agent/skill logic in `.ai/` and use **symlinks** to sync across Copilot, Gemini, and Claude.\n\n<!-- notes:\n- Summarize the main points: fact-checking, automation, and symlinking.\n- Thank the audience for their time.\n- Open the floor for any questions.\n-->",
+      "source_line": 228,
+      "line_count": 13
+    }
+  ],
+  "boundary": "hr",
+  "boundary_used": "hr",
+  "summary": {
+    "total_slides": 14,
+    "max_slide_lines": 19,
+    "over_threshold": [],
+    "max_threshold": 40
+  }
+}

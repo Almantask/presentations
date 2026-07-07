@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Gods, agents and confidence levels</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap">
+
+<style>
+:root {
+    --md-accent: #00D4AA;
+    --md-accent-soft: rgba(0, 212, 170, 0.14);
+    --md-bg: #0A1628;
+    --md-border: #163058;
+    --md-code-bg: #0E1E38;
+    --md-link: #00D4AA;
+    --md-link-hover: #00FCCA;
+    --md-success: #10A85C;
+    --md-surface: #102340;
+    --md-text: #F7F7F2;
+    --md-text-muted: rgba(247, 247, 242, 0.68);
+    --md-warn: #C87C10;
+    --md-font-heading: 'Inter', system-ui, -apple-system, sans-serif;
+    --md-font-body: 'Inter', system-ui, -apple-system, sans-serif;
+    --md-font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; height: 100%; overflow: hidden; }
+body {
+    background: radial-gradient(circle at 50% 50%, var(--md-surface) 0%, var(--md-bg) 100%);
+    color: var(--md-text);
+    font-family: var(--md-font-body);
+    font-size: 22px;
+    line-height: 1.5;
+}
+
+/* Slide layout — each slide is a viewport-sized panel with transition animations */
+.deck { width: 100vw; height: 100vh; position: relative; perspective: 1000px; }
+.slide {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    visibility: hidden;
+    transform: scale(0.98) translateY(15px);
+    transition: opacity 0.5s cubic-bezier(0.25, 1, 0.5, 1), transform 0.5s cubic-bezier(0.25, 1, 0.5, 1), visibility 0.5s;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 4vh 8vw;
+    overflow: auto;
+    pointer-events: none;
+}
+.slide.active {
+    opacity: 1;
+    visibility: visible;
+    transform: scale(1) translateY(0);
+    pointer-events: auto;
+}
+.slide h1, .slide h2, .slide h3 {
+    font-family: var(--md-font-heading);
+    margin: 0 0 0.6em;
+    line-height: 1.15;
+    font-weight: 700;
+    color: var(--md-text);
+    text-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    letter-spacing: -0.01em;
+}
+.slide h1 { font-size: 3.2rem; }
+.slide h2 { font-size: 2.6rem; }
+.slide h3 { font-size: 1.95rem; }
+.slide p { margin: 0.5em 0 1em; font-size: 1.3rem; color: var(--md-text-muted); }
+.slide ul, .slide ol { padding-left: 1.5em; font-size: 1.25rem; color: var(--md-text-muted); }
+.slide li { margin: 0.5em 0; }
+.slide a { color: var(--md-link); text-decoration: none; transition: color 0.2s; }
+.slide a:hover { color: var(--md-link-hover); text-decoration: underline; }
+.slide code {
+    background: var(--md-code-bg);
+    padding: 0.15em 0.35em;
+    border-radius: 6px;
+    font-family: var(--md-font-mono);
+    font-size: 0.85em;
+    border: 1px solid var(--md-border);
+}
+.slide pre {
+    background: var(--md-code-bg);
+    border: 1px solid var(--md-border);
+    border-radius: 12px;
+    padding: 1.25rem 1.5rem;
+    font-family: var(--md-font-mono);
+    font-size: 0.95rem;
+    overflow: auto;
+    margin: 1em 0;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+}
+.slide pre code { background: transparent; padding: 0; border: none; }
+.slide table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1.5em 0;
+    font-size: 1rem;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+    border-radius: 8px;
+    overflow: hidden;
+    border: 1px solid var(--md-border);
+}
+.slide th, .slide td { border: none; border-bottom: 1px solid var(--md-border); padding: 0.75em 1em; text-align: left; }
+.slide th { background: var(--md-surface); font-weight: 600; color: var(--md-accent); }
+.slide tr:last-child td { border-bottom: none; }
+.slide tr:hover td { background: var(--md-accent-soft); }
+.slide blockquote {
+    border-left: 5px solid var(--md-accent);
+    margin: 1.5em 0;
+    padding: 0.75em 1.5rem;
+    background: var(--md-accent-soft);
+    border-radius: 0 12px 12px 0;
+    color: var(--md-text-muted);
+    font-style: italic;
+    font-size: 1.25rem;
+    box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.05);
+}
+.slide hr { border: 0; border-top: 1px solid var(--md-border); margin: 1.5em 0; }
+
+.slide .callout {
+    border-left: 4px solid var(--md-accent);
+    background: var(--md-accent-soft);
+    padding: 0.85em 1.25em;
+    margin: 1.25em 0;
+    border-radius: 0 12px 12px 0;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+}
+.slide .callout-label {
+    font-family: var(--md-font-heading);
+    font-weight: 700;
+    font-size: 0.875rem;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--md-accent);
+    margin-bottom: 0.35em;
+    display: flex;
+    gap: 0.5em;
+    align-items: center;
+}
+.slide .callout-note { border-left-color: var(--md-link); }
+.slide .callout-note .callout-label { color: var(--md-link); }
+.slide .callout-tip { border-left-color: var(--md-success); }
+.slide .callout-tip .callout-label { color: var(--md-success); }
+.slide .callout-warning { border-left-color: var(--md-warn); }
+.slide .callout-warning .callout-label { color: var(--md-warn); }
+.slide .callout-caution { border-left-color: var(--md-warn); }
+.slide .callout-caution .callout-label { color: var(--md-warn); }
+
+/* Chrome (slide counter + hint) */
+.chrome {
+    position: fixed;
+    bottom: 1rem;
+    right: 1.25rem;
+    font-family: var(--md-font-mono);
+    font-size: 0.875rem;
+    color: var(--md-text-muted);
+    user-select: none;
+}
+.chrome a { color: var(--md-text-muted); margin-right: 0.5rem; text-decoration: none; }
+.chrome a:hover { color: var(--md-accent); }
+
+/* Progress bar */
+.progress {
+    position: fixed;
+    top: 0; left: 0;
+    height: 3px;
+    background: var(--md-accent);
+    transition: width 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+    z-index: 100;
+}
+
+/* Presenter mode (P key toggles body class) */
+body.presenter .deck { width: 60vw; }
+body.presenter .presenter-panel { display: flex; }
+.presenter-panel {
+    display: none;
+    position: fixed;
+    top: 0; right: 0;
+    width: 40vw;
+    height: 100vh;
+    background: var(--md-surface);
+    border-left: 1px solid var(--md-border);
+    flex-direction: column;
+    padding: 1.5rem 1.5rem;
+    font-size: 1rem;
+    overflow: auto;
+}
+.presenter-panel h3 {
+    font-family: var(--md-font-heading);
+    font-size: 0.875rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--md-text-muted);
+    margin: 0 0 0.5rem;
+    border-bottom: 1px solid var(--md-border);
+    padding-bottom: 0.4rem;
+}
+.presenter-panel .clock { font-family: var(--md-font-mono); font-size: 1.5rem; margin-bottom: 1rem; }
+.presenter-panel .notes { flex: 1; line-height: 1.5; color: var(--md-text); margin-bottom: 1rem; white-space: pre-wrap; }
+.presenter-panel .next-preview {
+    background: var(--md-bg);
+    border: 1px solid var(--md-border);
+    border-radius: 8px;
+    padding: 0.75rem 1rem;
+    font-size: 0.875rem;
+    max-height: 25vh;
+    overflow: hidden;
+    opacity: 0.7;
+}
+.presenter-panel .next-preview h4 {
+    font-family: var(--md-font-heading);
+    margin: 0 0 0.3em;
+    font-size: 1rem;
+    color: var(--md-accent);
+}
+
+/* Print: all slides visible, one per page */
+@media print {
+    html, body { height: auto; overflow: visible; background: white !important; color: black !important; }
+    .chrome, .progress, .presenter-panel { display: none !important; }
+    .deck, body.presenter .deck { width: 100%; height: auto; }
+    .slide {
+        display: flex !important;
+        position: relative;
+        height: 100vh;
+        opacity: 1 !important;
+        visibility: visible !important;
+        transform: none !important;
+        page-break-after: always;
+        break-after: page;
+        padding: 4vh 8vw;
+    }
+    .slide:last-child { page-break-after: auto; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    * { animation: none !important; transition: none !important; }
+}
+</style>
+</head>
+<body class="style-technical">
+<div id="progress" class="progress"></div>
+<div class="deck">
+<section class="slide" id="slide-1" data-notes=""><h1>Gods, agents and confidence levels</h1><p>Reusing orchestrated agent workflows across AI tools</p></section>
+<section class="slide" id="slide-2" data-notes="- Welcome everyone to the presentation.
+- Introduce myself: engineering manager for 10+ years.
+- Highlight my passion projects (baltic mythology, D&amp;D soundboard).
+- Explain that these projects became the testing ground for advanced AI agent orchestration."><h1>My AI Journey</h1><p>Engineering Manager &amp; AI experimenter</p>
+<ul><li><strong>10+ years in IT</strong> as an Engineering Manager.</li><li><strong>3 years of AI prototyping</strong>: built over a hundred agents.</li><li><strong>Author</strong>: wrote an early book on applying AI without sacrificing software quality.</li><li><strong>Prototypes</strong>: built a baltic mythology research site and a D&amp;D soundboard/ambience mixer.</li></ul></section>
+<section class="slide" id="slide-3" data-notes="- Show the audience this example of Perkūnas.
+- Point out how easy it is for image generators and LLMs to hallucinate details that sound or look plausible.
+- Explain the frustration of trying to get correct facts on obscure topics like baltic mythology."><h1>Perkūnas: AI vs. Mythology</h1><p>Looking good is not the same as being correct</p>
+<ul><li><strong>Perkūnas</strong>: Baltic god of thunder, sky, storms, rain, and war.</li><li><strong>AI-Generated Image</strong>: Shows him riding a carriage pulled by three goats, holding an axe.</li><li><strong>The Historical Reality</strong>:</li></ul>
+<p>- Goats were <em>sacrificed</em> to Perkūnas; he doesn't ride them. - He traditionally wields a <em>sword</em>, not an axe.</p>
+<ul><li><strong>Key Lesson</strong>: Visually appealing outputs from AI can be factually wrong.</li></ul></section>
+<section class="slide" id="slide-4" data-notes="- Explain that doing this research manually was very slow.
+- The websites look like they are from the 90s, search functions are broken.
+- Contrast between Lithuanian and Latvian spellings and stories.
+- Ask the question: How do we automate this?"><h1>The Historian&#x27;s Dilemma</h1><p>Manual research is tedious and boring</p>
+<ul><li>Baltic mythology records are stored in <strong>primitive, scattered sites</strong>.</li><li>Details are often <strong>inconsistent</strong> between Latvian and Lithuanian sources.</li><li><strong>Manual verification</strong> is boring, repetitive, and time-consuming.</li><li><strong>Question</strong>: Can we automate this research and fact-checking flow?</li></ul></section>
+<section class="slide" id="slide-5" data-notes="- Describe my initial approach: giving agents massive, monolithic instructions.
+- Because the agents needed to know the whole flow, I had to duplicate instructions across all of them.
+- If one instruction changed, I had to update 4 different files."><h1>Initial Phase: Heavy Agents</h1><p>Monolithic configurations with duplicate logic</p>
+<ul><li><strong>The Multi-Agent Team</strong>:</li></ul>
+<p>- <strong>Browser Researcher</strong>: Google search and data gathering. - <strong>Editor</strong>: Compares findings with repository and flags issues. - <strong>FE Developer</strong>: Implements UI display.</p>
+<ul><li><strong>The Problem</strong>:</li></ul>
+<p>- Flow instructions duplicated across all 4 agents. - Inconsistent orchestration (sometimes subagents spawn, sometimes not).</p></section>
+<section class="slide" id="slide-6" data-notes="- Explain the architectural shift: moving from heavy agents to modular skills.
+- Like a person who has skills (cooking, typing) that are separate from their personality.
+- This lets us reuse skills across different agents or even different projects."><h1>Shifting from Agents to Skills</h1><p>Decoupling identity from action sequences</p>
+<ul><li><strong>Agents</strong>: Define <em>who</em> they are, their persona, and what tools they can access.</li><li><strong>Skills</strong>: Define <em>how</em> a specific task is orchestrated.</li><li>Split the monolithic logic into two reusable <strong>Skills</strong>:</li></ul>
+<p>1. <strong>Fact Check Skill</strong> — verifying existing content. 2. <strong>Research Skill</strong> — discovering and verifying new concepts.</p></section>
+<section class="slide" id="slide-7" data-notes="- Detail how the Fact Check skill works under the hood.
+- By running searches in parallel (LT and LV), we get both sides of the baltic myths.
+- We also expanded it to read PDFs since academic papers are often stored as PDFs."><h1>The Fact Check Skill</h1><p>Parallel search and automated PDF analysis</p>
+<ul><li>Spawns two parallel <strong>Browser Researchers</strong>:</li></ul>
+<p>- <strong>Researcher 1</strong>: Searches Lithuanian (LT) resources. - <strong>Researcher 2</strong>: Searches Latvian (LV) resources.</p>
+<ul><li>Reads and parses <strong>public PDF files</strong> for deep historical context.</li><li>Generates a structured comparison and confidence table.</li></ul></section>
+<section class="slide" id="slide-8" data-notes="- Show the visual evidence of the Fact Check skill in action.
+- Walk through the columns: Deity, Claim, LT Source, LV Source, Status, and Confidence.
+- Note how the tool handles conflicting data or low confidence."><h1>Fact Check Results</h1><p>Real verification table generated by the skill</p>
+<p><img src="image.png" alt="Fact Check Results"></p></section>
+<section class="slide" id="slide-9" data-notes="- Explain the Research skill which is focused on creating new pages/content.
+- This shows a pipeline of LLM Research -&gt; Browser Verification -&gt; Editorial Review -&gt; Code Generation."><h1>The Research Skill</h1><p>Synthesizing and building new interfaces</p>
+<ul><li><strong>Parallel Discovery Phase</strong>:</li></ul>
+<p>- <strong>LLM Researcher</strong>: Synthesizes creative ideas and outlines. - <strong>Browser Researchers</strong>: Cross-reference and verify.</p>
+<ul><li><strong>Build Phase</strong>:</li></ul>
+<p>- <strong>Editor Agent</strong>: Flags structural conflicts. - <strong>FE Dev Agent</strong>: Implements the user interface automatically.</p></section>
+<section class="slide" id="slide-10" data-notes="- Discuss the developer experience problem.
+- Every tool wants its own configuration folder.
+- Copilot uses one folder, Gemini another, Antigravity another.
+- Keeping these in sync was incredibly frustrating and error-prone."><h1>The Multitool Headache</h1><p>The pain of configuration divergence</p>
+<ul><li>Using multiple AI tools for different purposes:</li></ul>
+<p>- <strong>GitHub Copilot</strong> (cheap prototyping and completions). - <strong>Gemini &amp; Antigravity</strong> (quick fixes and research).</p>
+<ul><li><strong>Divergence Nightmare</strong>:</li></ul>
+<p>- 5 agents + 2 skills = 7 configs. - Duplicated across <code>.github</code>, <code>.gemini</code>, and <code>.antigravity</code> folders. - <strong>15 files to maintain manually</strong>! Updates became inconsistent.</p></section>
+<section class="slide" id="slide-11" data-notes="- Walk through the symlink setup.
+- This simple trick of directory symlinking solved the duplication.
+- Any change made in `.ai/` is instantly visible to all AI tools.
+- Frontmatter differences are ignored by tools that don&#x27;t support them."><h1>The Solution: Symlinks</h1><p>Single source of truth across all tools</p>
+<ul><li>Move all agent and skill definitions to a central <code>.ai/</code> folder.</li><li>Create <strong>symbolic links</strong> in each tool's configuration directory:</li></ul>
+<p>``<code>bash .ai/agents -&gt; .gemini/agents .ai/skills -&gt; .gemini/skills # Same symlinks for .antigravity and .github </code>``</p>
+<ul><li><strong>Unified Frontmatter</strong>: Mixed frontmatter fields are gracefully parsed; tools ignore keys they don't recognize.</li></ul></section>
+<section class="slide" id="slide-12" data-notes="- Be honest about the limitations.
+- Gemini is more sensitive to non-standard headers.
+- Keeping them lean is usually the best approach unless you specifically need Claude-only steering fields."><h1>Tool Quirks &amp; Frontmatter</h1><p>Handling differences between LLM clients</p>
+<ul><li><strong>Gemini</strong>:</li></ul>
+<p>- Strict validator; crashes on unknown frontmatter fields. - <em>Fix</em>: Keep configs lean and rely on sensible defaults.</p>
+<ul><li><strong>Claude</strong>:</li></ul>
+<p>- Powerhouse; supports 20+ frontmatter fields for advanced steering.</p>
+<ul><li><strong>Strategy</strong>: Design for the lowest common denominator, or use a pre-process script if needed.</li></ul></section>
+<section class="slide" id="slide-13" data-notes="- Share the skills I reuse in almost every repository.
+- These are the foundational tools that speed up my engineering workflows."><h1>My Reusable Skill Library</h1><p>My personal toolbox carried across projects</p>
+<ul><li><strong>markdown-to-slides</strong>: Compiles outlines into interactive decks (like this one!).</li><li><strong>agent-designer</strong>: Structures multi-agent architectures.</li><li><strong>skill-writer</strong>: Auto-generates schemas and guides for new skills.</li><li><strong>ci-cd-pipeline-builder</strong>: Fast quality gate setup.</li><li><strong>commit-writer</strong>: Enforces semantic commit messages.</li><li><strong>improving-agent</strong>: Refines skills when errors are found.</li></ul></section>
+<section class="slide" id="slide-14" data-notes="- Summarize the main points: fact-checking, automation, and symlinking.
+- Thank the audience for their time.
+- Open the floor for any questions."><h1>Key Takeaways</h1><p>How to build trust and efficiency with AI</p>
+<ul><li>&gt; <strong>Automate the boring stuff</strong>, but never trust AI blindly.</li><li>Use multi-lingual browser searches and PDF scraping to fact-check.</li><li>Centralize your agent/skill logic in <code>.ai/</code> and use <strong>symlinks</strong> to sync across Copilot, Gemini, and Claude.</li></ul></section>
+</div>
+
+<aside class="presenter-panel" aria-label="Presenter view (toggle with P)">
+    <h3>Clock</h3>
+    <div class="clock">--:--:--</div>
+    <h3>Speaker notes</h3>
+    <div class="notes"></div>
+    <div class="next-preview"></div>
+</aside>
+
+<div class="chrome">
+    <a href="#" onclick="event.preventDefault(); document.dispatchEvent(new KeyboardEvent('keydown', {key:'P'}))">P · presenter</a>
+    <span id="counter">1 / 14</span>
+</div>
+
+<script>
+(function () {
+    "use strict";
+    var slides = document.querySelectorAll(".slide");
+    var total = slides.length;
+    var current = 0;
+    var presenter = false;
+
+    function show(idx) {
+        idx = Math.max(0, Math.min(total - 1, idx));
+        slides.forEach(function (s, i) {
+            s.classList.toggle("active", i === idx);
+        });
+        current = idx;
+        document.getElementById("counter").textContent = (current + 1) + " / " + total;
+        var prog = document.getElementById("progress");
+        if (prog) prog.style.width = (100 * (current + 1) / total) + "%";
+        if (location.hash !== "#" + (current + 1)) {
+            history.replaceState(null, "", "#" + (current + 1));
+        }
+        updatePresenterPanel();
+    }
+
+    function next() { show(current + 1); }
+    function prev() { show(current - 1); }
+    function first() { show(0); }
+    function last() { show(total - 1); }
+
+    function togglePresenter() {
+        presenter = !presenter;
+        document.body.classList.toggle("presenter", presenter);
+        updatePresenterPanel();
+    }
+
+    function updatePresenterPanel() {
+        var panel = document.querySelector(".presenter-panel");
+        if (!panel) return;
+        var notes = slides[current].getAttribute("data-notes") || "(no notes for this slide)";
+        panel.querySelector(".notes").textContent = notes;
+        var preview = panel.querySelector(".next-preview");
+        if (current + 1 < total) {
+            var nextSlide = slides[current + 1];
+            var title = nextSlide.querySelector("h1, h2") ;
+            preview.innerHTML = "<h4>Up next (#" + (current + 2) + ")</h4>" +
+                (title ? title.outerHTML : "<em>(no title)</em>");
+            preview.style.display = "block";
+        } else {
+            preview.innerHTML = "<h4>End of deck</h4>";
+        }
+    }
+
+    function tickClock() {
+        var now = new Date();
+        var hh = String(now.getHours()).padStart(2, "0");
+        var mm = String(now.getMinutes()).padStart(2, "0");
+        var ss = String(now.getSeconds()).padStart(2, "0");
+        var el = document.querySelector(".presenter-panel .clock");
+        if (el) el.textContent = hh + ":" + mm + ":" + ss;
+    }
+
+    document.addEventListener("keydown", function (e) {
+        if (e.metaKey || e.ctrlKey || e.altKey) return;
+        switch (e.key) {
+            case "ArrowRight":
+            case "PageDown":
+            case " ":
+                e.preventDefault(); next(); break;
+            case "ArrowLeft":
+            case "PageUp":
+                e.preventDefault(); prev(); break;
+            case "Home": e.preventDefault(); first(); break;
+            case "End":  e.preventDefault(); last();  break;
+            case "p":
+            case "P":
+                e.preventDefault(); togglePresenter(); break;
+            case "Escape":
+                if (presenter) { e.preventDefault(); togglePresenter(); }
+                break;
+        }
+    });
+
+    // Mount the initial slide (respect URL hash, otherwise slide 1)
+    var initial = 0;
+    if (location.hash) {
+        var n = parseInt(location.hash.slice(1), 10);
+        if (!isNaN(n) && n >= 1 && n <= total) initial = n - 1;
+    }
+    show(initial);
+    setInterval(tickClock, 1000);
+    tickClock();
+})();
+</script>
+</body>
+</html>
